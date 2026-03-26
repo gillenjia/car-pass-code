@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>车辆通行码</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* 页面整体容器 */
+        .page-container {
+            width: 100vw;
+            min-height: 100vh;
+            background-color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: #fff;
+        }
+
+        /* 返回箭头 */
+        .back-btn {
+            position: absolute;
+            left: 16px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        .back-btn::before, .back-btn::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 2px;
+            background-color: #333;
+            top: 50%;
+            left: 4px;
+        }
+        .back-btn::before { transform: rotate(-45deg); }
+        .back-btn::after { transform: rotate(45deg); }
+
+        /* 标题 */
+        .header-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* 右上角小程序按钮 */
+        .mini-btn {
+            position: absolute;
+            right: 16px;
+            width: 120px;
+            height: 40px;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .mini-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #999;
+            border-radius: 50%;
+        }
+        .mini-circle {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            position: relative;
+        }
+        .mini-circle::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-top: 2px solid #fff;
+            border-right: 2px solid #fff;
+            top: 6px;
+            left: 6px;
+            transform: rotate(-45deg);
+        }
+
+        /* 背景图区域 */
+        .banner {
+            width: 100%;
+            height: 220px;
+            background: url("https://p3-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/9f1b450a2de942eca45864e2f73eb1cb.jpg") no-repeat center top;
+            background-size: cover;
+        }
+
+        /* 白色卡片容器 */
+        .card {
+            background-color: #fff;
+            margin: -40px 16px 16px;
+            border-radius: 12px;
+            padding: 32px 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* 姓名 */
+        .user-name {
+            font-size: 28px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 16px;
+        }
+
+        /* 车牌号 */
+        .car-number {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        /* 校区标签 */
+        .campus-tag {
+            width: 100%;
+            height: 56px;
+            background: linear-gradient(to right, #64b5f6 0%, #42a5f5 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 28px;
+        }
+
+        /* 日期 */
+        .date-text {
+            font-size: 32px;
+            font-weight: 500;
+            color: #333;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* 绿色二维码 */
+        .qr-code {
+            width: 85%;
+            max-width: 360px;
+            aspect-ratio: 1/1;
+            margin: 0 auto 24px;
+            background: url("https://api.qrserver.com/v1/create-qr-code/?size=360x360&data=vehicle_pass_code&color=009900&bgcolor=ffffff") no-repeat center;
+            background-size: contain;
+        }
+
+        /* 时间 */
+        .time-text {
+            font-size: 32px;
+            font-weight: 500;
+            color: #333;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* 有效期 */
+        .validity-text {
+            font-size: 22px;
+            color: #333;
+            text-align: center;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- 顶部导航 -->
+        <div class="header">
+            <div class="back-btn" onclick="history.back()"></div>
+            <div class="header-title">车辆通行码</div>
+            <div class="mini-btn">
+                <div class="mini-dot"></div>
+                <div class="mini-dot"></div>
+                <div class="mini-dot"></div>
+                <div class="mini-circle"></div>
+            </div>
+        </div>
+
+        <!-- 背景图 -->
+        <div class="banner"></div>
+
+        <!-- 白色卡片 -->
+        <div class="card">
+            <div class="user-name">贾金梁</div>
+            <div class="car-number">车牌号 苏C063EU</div>
+            <div class="campus-tag">南湖校区</div>
+            <div class="date-text" id="currentDate"></div>
+            <div class="qr-code"></div>
+            <div class="time-text" id="currentTime"></div>
+            <div class="validity-text" id="validityText"></div>
+        </div>
+    </div>
+
+    <script>
+        // 实时更新北京时间（严格匹配格式）
+        function updateDateTime() {
+            const now = new Date();
+            // 转换为北京时间（UTC+8）
+            const beijingTime = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + 8 * 3600000);
+            
+            // 日期格式：YYYY-MM-DD
+            const year = beijingTime.getFullYear();
+            const month = String(beijingTime.getMonth() + 1).padStart(2, '0');
+            const day = String(beijingTime.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`;
+            
+            // 时间格式：HH:MM:SS
+            const hours = String(beijingTime.getHours()).padStart(2, '0');
+            const minutes = String(beijingTime.getMinutes()).padStart(2, '0');
+            const seconds = String(beijingTime.getSeconds()).padStart(2, '0');
+            const timeStr = `${hours}:${minutes}:${seconds}`;
+            
+            // 更新页面
+            document.getElementById('currentDate').textContent = dateStr;
+            document.getElementById('currentTime').textContent = timeStr;
+            document.getElementById('validityText').textContent = `有效期：${dateStr}至${dateStr}`;
+        }
+
+        // 初始化+每秒刷新
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+    </script>
+</body>
+</html>
